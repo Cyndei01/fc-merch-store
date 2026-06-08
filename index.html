@@ -1,0 +1,974 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>F&C Packaging Gear – Official Merch Store</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800&family=Barlow:wght@400;500;600&display=swap');
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --blue:      #8cc3fa;
+    --blue-dark: #4a9de0;
+    --blue-deep: #1a3a5c;
+    --navy:      #0d1f33;
+    --white:     #ffffff;
+    --off-white: #f4f8fc;
+    --gray-light:#e8f0f8;
+    --gray-mid:  #9bafc4;
+    --text:      #1a2d42;
+    --text-muted:#5a7a96;
+    --radius:    10px;
+    --shadow:    0 2px 12px rgba(13,31,51,0.10);
+    --cart-w:    340px;
+  }
+  body { font-family:'Barlow',sans-serif; background:var(--off-white); color:var(--text); min-height:100vh; }
+
+  /* ── GODADDY CONTAINER BREAKOUT ── */
+  .fc-store-wrap {
+    position: relative;
+    left: 50%;
+    right: 50%;
+    margin-left: -50vw;
+    margin-right: -50vw;
+    width: 100vw;
+    max-width: 100vw;
+  }
+  .hero { width:100%; border-bottom:4px solid var(--blue); line-height:0; }
+  .hero img { width:100%; height:auto; display:block; }
+
+  /* ── CART FAB ── */
+  .cart-fab {
+    position:fixed; bottom:24px; right:24px; z-index:200;
+    background:var(--navy); color:var(--white);
+    border:none; border-radius:999px; padding:0.7rem 1.3rem;
+    font-family:'Barlow',sans-serif; font-size:0.95rem; font-weight:700;
+    cursor:pointer; display:flex; align-items:center; gap:0.5rem;
+    box-shadow:0 4px 20px rgba(13,31,51,0.35);
+    border:2px solid var(--blue); transition:transform 0.2s;
+  }
+  .cart-fab:hover { transform:scale(1.05); }
+  .cart-fab .fab-badge {
+    background:var(--blue); color:var(--navy);
+    border-radius:999px; font-size:0.75rem; font-weight:800;
+    padding:1px 7px; min-width:22px; text-align:center;
+  }
+
+  /* ── CART DRAWER ── */
+  .cart-overlay {
+    display:none; position:fixed; inset:0; background:rgba(13,31,51,0.45);
+    z-index:300; backdrop-filter:blur(2px);
+  }
+  .cart-overlay.open { display:block; }
+  .cart-drawer {
+    position:fixed; top:0; right:0; width:var(--cart-w); max-width:100vw;
+    height:100vh; background:var(--white); z-index:400;
+    display:flex; flex-direction:column;
+    transform:translateX(100%); transition:transform 0.3s ease;
+    box-shadow:-4px 0 24px rgba(13,31,51,0.18);
+  }
+  .cart-drawer.open { transform:translateX(0); }
+  .cart-header {
+    background:var(--navy); color:var(--white);
+    padding:1.1rem 1.25rem; display:flex; align-items:center;
+    justify-content:space-between; border-bottom:3px solid var(--blue);
+    flex-shrink:0;
+  }
+  .cart-header h2 { font-family:'Barlow Condensed',sans-serif; font-size:1.3rem; font-weight:800; letter-spacing:0.05em; }
+  .cart-close { background:none; border:none; color:var(--gray-mid); font-size:1.5rem; cursor:pointer; line-height:1; padding:0 4px; }
+  .cart-close:hover { color:var(--white); }
+  .cart-items { flex:1; overflow-y:auto; padding:0.75rem 1.25rem; }
+  .cart-empty { text-align:center; color:var(--gray-mid); margin-top:3rem; font-size:0.95rem; }
+  .cart-empty svg { width:48px; height:48px; opacity:0.3; margin-bottom:0.75rem; }
+  .cart-item {
+    display:flex; gap:0.75rem; padding:0.85rem 0;
+    border-bottom:1px solid var(--gray-light); align-items:flex-start;
+  }
+  .cart-item-img { width:56px; height:56px; object-fit:cover; border-radius:6px; background:var(--gray-light); flex-shrink:0; }
+  .cart-item-info { flex:1; min-width:0; }
+  .cart-item-name { font-family:'Barlow Condensed',sans-serif; font-weight:700; font-size:0.95rem; color:var(--navy); text-transform:uppercase; line-height:1.2; }
+  .cart-item-meta { font-size:0.78rem; color:var(--text-muted); margin-top:2px; }
+  .cart-item-price { font-family:'Barlow Condensed',sans-serif; font-weight:800; color:var(--blue-deep); font-size:1rem; margin-top:4px; }
+  .cart-item-remove { background:none; border:none; color:var(--gray-mid); cursor:pointer; font-size:1rem; padding:0; flex-shrink:0; margin-top:2px; }
+  .cart-item-remove:hover { color:#e05555; }
+  .cart-item-qty { display:flex; align-items:center; gap:6px; margin-top:6px; }
+  .qty-btn { width:24px; height:24px; border-radius:50%; border:1.5px solid var(--gray-light); background:var(--off-white); color:var(--text); font-size:0.9rem; cursor:pointer; display:flex; align-items:center; justify-content:center; font-weight:700; }
+  .qty-btn:hover { border-color:var(--blue-dark); color:var(--blue-dark); }
+  .qty-num { font-size:0.88rem; font-weight:600; min-width:18px; text-align:center; }
+  .cart-footer { padding:1.25rem; border-top:2px solid var(--gray-light); flex-shrink:0; }
+  .cart-total-row { display:flex; justify-content:space-between; align-items:baseline; margin-bottom:0.25rem; }
+  .cart-total-label { font-size:0.9rem; font-weight:600; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.05em; }
+  .cart-total-amount { font-family:'Barlow Condensed',sans-serif; font-size:1.8rem; font-weight:800; color:var(--navy); }
+  .cart-discount-row { display:flex; justify-content:space-between; align-items:baseline; margin-bottom:0.5rem; }
+  .cart-discount-label { font-size:0.82rem; font-weight:600; color:#2a8a4a; }
+  .cart-discount-amount { font-family:'Barlow Condensed',sans-serif; font-size:1rem; font-weight:700; color:#2a8a4a; }
+  .cart-shipping-row { font-size:0.78rem; color:#2a8a4a; font-weight:600; margin-bottom:0.75rem; text-align:right; letter-spacing:0.02em; }
+  .coupon-row { display:flex; gap:0.5rem; margin-bottom:0.85rem; }
+  .coupon-input {
+    flex:1; font-family:'Barlow',sans-serif; font-size:0.85rem;
+    padding:0.5rem 0.75rem; border:1.5px solid var(--gray-light);
+    border-radius:7px; background:var(--off-white); color:var(--text);
+    outline:none; transition:border-color 0.2s; text-transform:uppercase;
+    letter-spacing:0.05em;
+  }
+  .coupon-input:focus { border-color:var(--blue-dark); }
+  .coupon-input.valid { border-color:#2a8a4a; background:#f0faf4; }
+  .coupon-input.invalid { border-color:#e05555; background:#fff5f5; }
+  .btn-coupon {
+    padding:0.5rem 0.85rem; background:var(--navy); color:var(--white);
+    border:none; border-radius:7px; font-family:'Barlow',sans-serif;
+    font-size:0.82rem; font-weight:700; cursor:pointer; transition:background 0.2s;
+    white-space:nowrap;
+  }
+  .btn-coupon:hover { background:var(--blue-dark); }
+  .coupon-msg { font-size:0.78rem; margin-top:-0.5rem; margin-bottom:0.5rem; font-weight:600; }
+  .coupon-msg.ok { color:#2a8a4a; }
+  .coupon-msg.err { color:#e05555; }
+  .btn-checkout {
+    display:block; width:100%; padding:0.85rem;
+    background:var(--blue-dark); color:var(--white);
+    border:none; border-radius:8px; font-family:'Barlow',sans-serif;
+    font-size:1rem; font-weight:700; cursor:pointer; text-align:center;
+    text-decoration:none; transition:opacity 0.2s, transform 0.15s;
+    letter-spacing:0.03em;
+  }
+  .btn-checkout:hover { opacity:0.88; transform:translateY(-1px); }
+  .btn-clear { display:block; width:100%; margin-top:0.6rem; padding:0.5rem; background:none; border:1.5px solid var(--gray-light); border-radius:8px; font-family:'Barlow',sans-serif; font-size:0.82rem; font-weight:600; color:var(--text-muted); cursor:pointer; transition:all 0.2s; }
+  .btn-clear:hover { border-color:#e05555; color:#e05555; }
+
+  /* ── EMPLOYEE BANNER ── */
+  .employee-banner {
+    background:linear-gradient(90deg, #0d1f33 0%, #1a3a5c 50%, #0d1f33 100%);
+    color:var(--white); text-align:center;
+    padding:0.6rem 1rem; font-family:'Barlow',sans-serif;
+    font-size:0.88rem; font-weight:600; letter-spacing:0.04em;
+    border-bottom:2px solid var(--blue);
+    display:flex; align-items:center; justify-content:center; gap:0.6rem;
+  }
+  .employee-banner strong { color:var(--blue); font-family:'Barlow Condensed',sans-serif; font-size:1rem; letter-spacing:0.06em; }
+
+  /* ── FREE SHIPPING BADGE ── */
+  .shipping-bar {
+    background:var(--blue-dark); color:var(--white);
+    text-align:center; padding:0.45rem 1rem;
+    font-family:'Barlow',sans-serif; font-size:0.82rem; font-weight:700;
+    letter-spacing:0.06em; text-transform:uppercase;
+  }
+
+  /* ── FILTER BAR ── */
+  .filter-bar { display:flex; flex-wrap:wrap; gap:0.5rem; justify-content:center; padding:1.75rem 2rem 0.75rem; }
+  .filter-btn { font-family:'Barlow',sans-serif; font-size:0.85rem; font-weight:600; padding:0.45rem 1.2rem; border-radius:999px; border:1.5px solid var(--blue-dark); background:transparent; color:var(--blue-dark); cursor:pointer; transition:all 0.2s; letter-spacing:0.03em; }
+  .filter-btn:hover, .filter-btn.active { background:var(--blue-dark); color:var(--white); }
+
+  /* ── SECTION LABEL ── */
+  .section-label { font-family:'Barlow Condensed',sans-serif; font-size:1.6rem; font-weight:800; text-transform:uppercase; letter-spacing:0.07em; color:var(--navy); padding:1.5rem 2rem 0.75rem; border-bottom:2px solid var(--blue); margin:1.5rem 2rem 1.25rem; }
+  .section-label span { color:var(--blue-dark); font-size:1rem; font-weight:500; margin-left:0.75rem; letter-spacing:0.02em; }
+
+  /* ── PRODUCT GRID ── */
+  .product-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:1.5rem; padding:0 2rem 1rem; }
+
+  /* ── CARD ── */
+  .card { background:var(--white); border-radius:var(--radius); border:1px solid var(--gray-light); box-shadow:var(--shadow); overflow:hidden; display:flex; flex-direction:column; transition:transform 0.2s, box-shadow 0.2s; }
+  .card:hover { transform:translateY(-4px); box-shadow:0 8px 24px rgba(13,31,51,0.14); }
+  .card-img { width:100%; aspect-ratio:1/1; background:var(--gray-light); display:flex; flex-direction:column; align-items:center; justify-content:center; position:relative; overflow:hidden; }
+  .card-img svg { width:56px; height:56px; opacity:0.3; }
+  .card-img .img-label { font-size:0.75rem; color:var(--gray-mid); margin-top:0.5rem; font-weight:500; }
+  .badge { position:absolute; top:10px; left:10px; background:var(--blue); color:var(--navy); font-size:0.7rem; font-weight:700; padding:3px 9px; border-radius:999px; text-transform:uppercase; letter-spacing:0.05em; }
+  .card-body { padding:1rem 1.1rem; flex:1; display:flex; flex-direction:column; gap:0.4rem; }
+  .card-name { font-family:'Barlow Condensed',sans-serif; font-size:1.15rem; font-weight:700; color:var(--navy); letter-spacing:0.03em; text-transform:uppercase; }
+  .card-desc { font-size:0.82rem; color:var(--text-muted); line-height:1.5; }
+  .size-row { display:flex; align-items:center; gap:0.4rem; flex-wrap:wrap; margin-top:0.25rem; }
+  .size-label { font-size:0.75rem; font-weight:600; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.05em; }
+  .size-select { font-family:'Barlow',sans-serif; font-size:0.82rem; padding:0.3rem 0.6rem; border:1.5px solid var(--gray-light); border-radius:6px; background:var(--off-white); color:var(--text); cursor:pointer; outline:none; transition:border-color 0.2s; }
+  .size-select:focus { border-color:var(--blue-dark); }
+  .price-row { display:flex; align-items:baseline; gap:0.5rem; margin-top:0.25rem; }
+  .price { font-family:'Barlow Condensed',sans-serif; font-size:1.5rem; font-weight:800; color:var(--blue-deep); }
+
+  /* ── ADD TO CART BUTTON ── */
+  .btn-atc {
+    margin-top:0.75rem; width:100%; padding:0.65rem 1rem;
+    background:var(--navy); color:var(--white);
+    border:2px solid var(--navy); border-radius:7px;
+    font-family:'Barlow',sans-serif; font-size:0.92rem; font-weight:700;
+    cursor:pointer; display:flex; align-items:center; justify-content:center;
+    gap:0.4rem; transition:all 0.2s; letter-spacing:0.03em;
+  }
+  .btn-atc:hover { background:var(--blue-dark); border-color:var(--blue-dark); }
+  .btn-atc.added { background:var(--blue-dark); border-color:var(--blue-dark); }
+
+  /* ── BUY NOW (Stripe) BUTTON ── */
+  .btn-buy-now {
+    margin-top:0.4rem; width:100%; padding:0.65rem 1rem;
+    background:var(--blue-dark); color:var(--white);
+    border:2px solid var(--blue-dark); border-radius:7px;
+    font-family:'Barlow',sans-serif; font-size:0.92rem; font-weight:700;
+    cursor:pointer; display:flex; align-items:center; justify-content:center;
+    gap:0.4rem; transition:all 0.2s; letter-spacing:0.03em;
+    text-decoration:none;
+  }
+  .btn-buy-now:hover { background:var(--blue-deep); border-color:var(--blue-deep); }
+
+  /* ── COLOR BUBBLES ── */
+  .color-bubbles { display:flex; flex-wrap:wrap; gap:6px; margin-top:4px; }
+  .color-bubble {
+    width:26px; height:26px; border-radius:50%; cursor:pointer;
+    border:2px solid transparent; box-shadow:0 0 0 1px rgba(0,0,0,0.15);
+    transition:transform 0.15s, box-shadow 0.15s;
+    position:relative; flex-shrink:0;
+  }
+  .color-bubble:hover { transform:scale(1.15); }
+  .color-bubble.selected {
+    box-shadow:0 0 0 2px var(--white), 0 0 0 4px var(--blue-dark);
+    transform:scale(1.1);
+  }
+  .color-bubble[title]::after {
+    content:attr(title);
+    position:absolute; bottom:calc(100% + 6px); left:50%;
+    transform:translateX(-50%);
+    background:var(--navy); color:var(--white);
+    font-size:0.68rem; font-weight:600; white-space:nowrap;
+    padding:3px 7px; border-radius:4px; pointer-events:none;
+    opacity:0; transition:opacity 0.15s; z-index:10;
+  }
+  .color-bubble:hover::after { opacity:1; }
+  .color-selected-label { font-size:0.75rem; color:var(--text-muted); margin-top:3px; font-style:italic; }
+
+  /* ── ADDED FLASH ── */
+  @keyframes flashGreen { 0%,100%{background:var(--navy)} 50%{background:#2a8a4a} }
+  .btn-atc.flash { animation:flashGreen 0.5s ease; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width:900px) { .product-grid { grid-template-columns:repeat(2,1fr); } }
+  @media (max-width:600px) {
+    .product-grid { padding:0 1rem 1rem; grid-template-columns:1fr 1fr; }
+    .section-label { margin:1.25rem 1rem 1rem; padding:1.25rem 1rem 0.5rem; }
+    .filter-bar { padding:1.25rem 1rem 0.5rem; }
+    .cart-drawer { width:100vw; }
+  }
+  @media (max-width:420px) { .product-grid { grid-template-columns:1fr; } }
+</style>
+</head>
+<body>
+<div class="fc-store-wrap">
+
+<!-- HERO BANNER -->
+<div class="hero">
+  <img src="https://cdn.shopify.com/s/files/1/0001/9129/9624/files/grok-image-c710fc68-99e3-4861-9f94-b003a3606974.jpg?v=1780776995"
+    alt="F&C Packaging Gear — official merch" width="1500" height="500"/>
+</div>
+
+<!-- EMPLOYEE BANNER -->
+<div class="employee-banner">
+  🏷️ <strong>F&amp;C TEAM:</strong> Check your employee email for your exclusive discount code &amp; save big on every order!
+</div>
+
+<!-- FREE SHIPPING BAR -->
+<div class="shipping-bar">🚚 Free Shipping on All Orders — No Minimum!</div>
+
+<!-- CART FAB -->
+<button class="cart-fab" onclick="openCart()">
+  🛒 Cart <span class="fab-badge" id="cart-count">0</span>
+</button>
+
+<!-- CART OVERLAY -->
+<div class="cart-overlay" id="cart-overlay" onclick="closeCart()"></div>
+
+<!-- CART DRAWER -->
+<div class="cart-drawer" id="cart-drawer">
+  <div class="cart-header">
+    <h2>🛒 Your Cart</h2>
+    <button class="cart-close" onclick="closeCart()">✕</button>
+  </div>
+  <div class="cart-items" id="cart-items">
+    <div class="cart-empty" id="cart-empty">
+      <svg viewBox="0 0 64 64" fill="none"><circle cx="32" cy="32" r="28" stroke="#9bafc4" stroke-width="2"/><path d="M20 24h4l4 16h12l4-12H26" stroke="#9bafc4" stroke-width="2" stroke-linecap="round"/><circle cx="28" cy="44" r="2" fill="#9bafc4"/><circle cx="40" cy="44" r="2" fill="#9bafc4"/></svg>
+      <p>Your cart is empty.<br>Add some gear!</p>
+    </div>
+  </div>
+  <div class="cart-footer">
+    <div class="coupon-row">
+      <input class="coupon-input" id="coupon-input" type="text" placeholder="Discount code" maxlength="20" autocomplete="off"/>
+      <button class="btn-coupon" onclick="applyCoupon()">Apply</button>
+    </div>
+    <div class="coupon-msg" id="coupon-msg"></div>
+    <div class="cart-discount-row" id="discount-row" style="display:none;">
+      <span class="cart-discount-label" id="discount-label">Discount</span>
+      <span class="cart-discount-amount" id="discount-amount">-$0.00</span>
+    </div>
+    <div class="cart-total-row">
+      <span class="cart-total-label">Total</span>
+      <span class="cart-total-amount" id="cart-total">$0.00</span>
+    </div>
+    <div class="cart-shipping-row">🚚 FREE Shipping</div>
+    <a class="btn-checkout" href="YOUR_QUICKBOOKS_LINK" target="_blank" id="checkout-btn">Checkout</a>
+    <button class="btn-clear" onclick="clearCart()">Clear Cart</button>
+  </div>
+</div>
+
+<!-- FILTER BAR -->
+<div class="filter-bar">
+  <button class="filter-btn active" onclick="filterProducts('all',this)">All Items</button>
+  <button class="filter-btn" onclick="filterProducts('hat',this)">Hats</button>
+  <button class="filter-btn" onclick="filterProducts('shirt',this)">Shirts</button>
+  <button class="filter-btn" onclick="filterProducts('hoodie',this)">Hoodies</button>
+  <button class="filter-btn" onclick="filterProducts('jumpsuit',this)">Apparel Sets</button>
+  <button class="filter-btn" onclick="filterProducts('backpack',this)">Bags &amp; Coolers</button>
+  <button class="filter-btn" onclick="filterProducts('drinkware',this)">Mugs &amp; Tumblers</button>
+</div>
+
+<!-- ══════════ HATS ══════════ -->
+<div class="section-label" data-category="hat">Hats <span>$29.99 each · One size fits most</span></div>
+<div class="product-grid" data-category="hat">
+
+  <div class="card" data-cat="hat">
+    <div class="card-img">
+      <img src="https://cdn.shopify.com/s/files/1/0001/9129/9624/files/ChatGPT_Image_Jun_7_2026_at_03_31_28_PM.png?v=1780871504" alt="F&C Classic Snapback" style="width:100%;height:100%;object-fit:cover;display:block;"/>
+      <span class="badge">Hat</span>
+    </div>
+    <div class="card-body">
+      <div class="card-name">F&amp;C Classic Snapback</div>
+      <div class="card-desc">Company branded structured 6-panel cap. One size fits most.</div>
+      <div class="price-row"><span class="price">$29.99</span></div>
+      <button class="btn-atc" onclick="addToCart(this,'F&amp;C Classic Snapback','$29.99',29.99,'','')">+ Add to Cart</button>
+    </div>
+  </div>
+
+  <div class="card" data-cat="hat">
+    <div class="card-img">
+      <img src="https://cdn.shopify.com/s/files/1/0001/9129/9624/files/ChatGPT_Image_Jun_7_2026_at_03_25_01_PM.png?v=1780871133" alt="F&C Classic Mesh Cap" style="width:100%;height:100%;object-fit:cover;display:block;"/>
+      <span class="badge">Hat</span>
+    </div>
+    <div class="card-body">
+      <div class="card-name">F&amp;C Classic Mesh Cap</div>
+      <div class="card-desc">Company branded mesh back cap with foam front panel. Adjustable snapback closure.</div>
+      <div class="price-row"><span class="price">$29.99</span></div>
+      <button class="btn-atc" onclick="addToCart(this,'F&amp;C Classic Mesh Cap','$29.99',29.99,'','')">+ Add to Cart</button>
+    </div>
+  </div>
+
+  <div class="card" data-cat="hat">
+    <div class="card-img">
+      <img src="https://cdn.shopify.com/s/files/1/0001/9129/9624/files/ChatGPT_Image_Jun_7_2026_at_03_37_09_PM.png?v=1780871870" alt="F&C Knit Beanie" style="width:100%;height:100%;object-fit:cover;display:block;"/>
+      <span class="badge">Hat</span>
+    </div>
+    <div class="card-body">
+      <div class="card-name">F&amp;C Knit Beanie</div>
+      <div class="card-desc">Company branded knit beanie. One size fits most.</div>
+      <div class="price-row"><span class="price">$29.99</span></div>
+      <button class="btn-atc" onclick="addToCart(this,'F&amp;C Knit Beanie','$29.99',29.99,'','')">+ Add to Cart</button>
+    </div>
+  </div>
+
+</div>
+
+<!-- ══════════ SHIRTS ══════════ -->
+<div class="section-label" data-category="shirt">Shirts <span>$39.99 each · Sizes S–5X</span></div>
+<div class="product-grid" data-category="shirt">
+
+  <div class="card" data-cat="shirt">
+    <div class="card-img">
+      <img src="https://cdn.shopify.com/s/files/1/0001/9129/9624/files/ChatGPT_Image_Jun_7_2026_at_01_23_59_PM.png?v=1780866288" alt="F&C Basic Logo Tee" style="width:100%;height:100%;object-fit:cover;display:block;"/>
+      <span class="badge">Shirt</span>
+    </div>
+    <div class="card-body">
+      <div class="card-name">F&amp;C Basic Logo Tee</div>
+      <div class="card-desc">Company branded classic crew neck tee.</div>
+      <div class="size-row"><span class="size-label">Color:</span>
+        <select class="size-select" id="s1-color"><option>Navy Blue</option><option>Light Blue</option><option>Red</option><option>Yellow</option><option>Pink</option><option>Black</option><option>White</option><option>Gray</option></select>
+      </div>
+      <div class="size-row"><span class="size-label">Size:</span>
+        <select class="size-select" id="s1-size"><option>S</option><option>M</option><option selected>L</option><option>XL</option><option>2X</option><option>3X</option><option>4X</option><option>5X</option></select>
+      </div>
+      <div class="price-row"><span class="price">$39.99</span></div>
+      <button class="btn-atc" onclick="addToCart(this,'F&amp;C Basic Logo Tee','$39.99',39.99,'s1-color','s1-size')">+ Add to Cart</button>
+    </div>
+  </div>
+
+  <div class="card" data-cat="shirt">
+    <div class="card-img">
+      <img src="https://cdn.shopify.com/s/files/1/0001/9129/9624/files/Virtual_Model-1c48b436-4e2a-4548-bbff-96cbdc7f9aee-Photoroom.png?v=1780867143" alt="Heartbeat of America Tee" style="width:100%;height:100%;object-fit:cover;display:block;"/>
+      <span class="badge">Shirt</span>
+    </div>
+    <div class="card-body">
+      <div class="card-name">Heartbeat of America Tee</div>
+      <div class="card-desc">Company branded "Heartbeat of America" graphic tee. Soft cotton, unisex fit.</div>
+      <div class="size-row"><span class="size-label">Color:</span>
+        <select class="size-select" id="s2-color"><option>Navy Blue</option><option>Light Blue</option><option>Red</option><option>Yellow</option><option>Pink</option><option>Black</option><option>White</option><option>Gray</option></select>
+      </div>
+      <div class="size-row"><span class="size-label">Size:</span>
+        <select class="size-select" id="s2-size"><option>S</option><option>M</option><option selected>L</option><option>XL</option><option>2X</option><option>3X</option><option>4X</option><option>5X</option></select>
+      </div>
+      <div class="price-row"><span class="price">$39.99</span></div>
+      <button class="btn-atc" onclick="addToCart(this,'Heartbeat of America Tee','$39.99',39.99,'s2-color','s2-size')">+ Add to Cart</button>
+    </div>
+  </div>
+
+  <div class="card" data-cat="shirt">
+    <div class="card-img">
+      <img src="https://cdn.shopify.com/s/files/1/0001/9129/9624/files/ChatGPT_Image_Jun_7_2026_at_01_58_00_PM.png?v=1780866288" alt="One Mile at a Time Tee" style="width:100%;height:100%;object-fit:cover;display:block;"/>
+      <span class="badge">Shirt</span>
+    </div>
+    <div class="card-body">
+      <div class="card-name">One Mile at a Time Tee</div>
+      <div class="card-desc">Company branded "One Mile at a Time" graphic tee. Soft cotton, unisex fit.</div>
+      <div class="size-row"><span class="size-label">Color:</span>
+        <select class="size-select" id="s3-color"><option>Navy Blue</option><option>Light Blue</option><option>Red</option><option>Yellow</option><option>Pink</option><option>Black</option><option>White</option><option>Gray</option></select>
+      </div>
+      <div class="size-row"><span class="size-label">Size:</span>
+        <select class="size-select" id="s3-size"><option>S</option><option>M</option><option selected>L</option><option>XL</option><option>2X</option><option>3X</option><option>4X</option><option>5X</option></select>
+      </div>
+      <div class="price-row"><span class="price">$39.99</span></div>
+      <button class="btn-atc" onclick="addToCart(this,'One Mile at a Time Tee','$39.99',39.99,'s3-color','s3-size')">+ Add to Cart</button>
+    </div>
+  </div>
+
+  <div class="card" data-cat="shirt">
+    <div class="card-img">
+      <img src="https://cdn.shopify.com/s/files/1/0001/9129/9624/files/grok-image-becc3e01-dae6-49da-9bdb-680a7391f74a.jpg?v=1780867374" alt="Market Isn't Dead Tee" style="width:100%;height:100%;object-fit:cover;display:block;"/>
+      <span class="badge">Shirt</span>
+    </div>
+    <div class="card-body">
+      <div class="card-name">Market Isn't Dead Tee</div>
+      <div class="card-desc">Company branded "Market Isn't Dead" statement tee. Soft cotton, unisex fit.</div>
+      <div class="size-row"><span class="size-label">Color:</span>
+        <select class="size-select" id="s4-color"><option>Navy Blue</option><option>Light Blue</option><option>Red</option><option>Yellow</option><option>Pink</option><option>Black</option><option>White</option><option>Gray</option></select>
+      </div>
+      <div class="size-row"><span class="size-label">Size:</span>
+        <select class="size-select" id="s4-size"><option>S</option><option>M</option><option selected>L</option><option>XL</option><option>2X</option><option>3X</option><option>4X</option><option>5X</option></select>
+      </div>
+      <div class="price-row"><span class="price">$39.99</span></div>
+      <button class="btn-atc" onclick="addToCart(this,'Market Isn\'t Dead Tee','$39.99',39.99,'s4-color','s4-size')">+ Add to Cart</button>
+    </div>
+  </div>
+
+</div>
+
+<!-- ══════════ HOODIES ══════════ -->
+<div class="section-label" data-category="hoodie">Hoodies <span>$59.99 each · Sizes S–5X</span></div>
+<div class="product-grid" data-category="hoodie">
+
+  <div class="card" data-cat="hoodie">
+    <div class="card-img">
+      <img src="https://cdn.shopify.com/s/files/1/0001/9129/9624/files/ChatGPT_Image_Jun_7_2026_at_01_31_24_PM.png?v=1780866288" alt="F&C Basic Logo Hoodie" style="width:100%;height:100%;object-fit:cover;display:block;"/>
+      <span class="badge">Hoodie</span>
+    </div>
+    <div class="card-body">
+      <div class="card-name">F&amp;C Basic Logo Hoodie</div>
+      <div class="card-desc">Company branded classic pullover hoodie.</div>
+      <div class="size-row"><span class="size-label">Color:</span>
+        <select class="size-select" id="h1-color"><option>Navy Blue</option><option>Light Blue</option><option>Red</option><option>Yellow</option><option>Pink</option><option>Black</option><option>White</option><option>Gray</option></select>
+      </div>
+      <div class="size-row"><span class="size-label">Size:</span>
+        <select class="size-select" id="h1-size"><option>S</option><option>M</option><option selected>L</option><option>XL</option><option>2X</option><option>3X</option><option>4X</option><option>5X</option></select>
+      </div>
+      <div class="price-row"><span class="price">$59.99</span></div>
+      <button class="btn-atc" onclick="addToCart(this,'F&amp;C Basic Logo Hoodie','$59.99',59.99,'h1-color','h1-size')">+ Add to Cart</button>
+    </div>
+  </div>
+
+  <div class="card" data-cat="hoodie">
+    <div class="card-img" style="cursor:pointer;"
+      onmouseenter="this.querySelector('.img-front').style.opacity='0';this.querySelector('.img-back').style.opacity='1';"
+      onmouseleave="this.querySelector('.img-front').style.opacity='1';this.querySelector('.img-back').style.opacity='0';">
+      <img class="img-front" src="https://cdn.shopify.com/s/files/1/0001/9129/9624/files/ChatGPT_Image_Jun_7_2026_at_02_00_58_PM.png?v=1780866288" alt="One Mile at a Time Hoodie – Front" style="width:100%;height:100%;object-fit:cover;display:block;position:absolute;top:0;left:0;transition:opacity 0.3s;"/>
+      <img class="img-back" src="https://cdn.shopify.com/s/files/1/0001/9129/9624/files/ChatGPT_Image_Jun_7_2026_at_02_02_37_PM.png?v=1780866288" alt="One Mile at a Time Hoodie – Back" style="width:100%;height:100%;object-fit:cover;display:block;position:absolute;top:0;left:0;opacity:0;transition:opacity 0.3s;"/>
+      <span class="badge">Hoodie</span>
+      <span style="position:absolute;bottom:8px;right:8px;background:rgba(13,31,51,0.6);color:#8cc3fa;font-size:0.68rem;font-weight:600;padding:3px 8px;border-radius:999px;">Hover for back</span>
+    </div>
+    <div class="card-body">
+      <div class="card-name">One Mile at a Time Hoodie</div>
+      <div class="card-desc">Company branded "One Mile at a Time" graphic pullover hoodie. Heavyweight fleece.</div>
+      <div class="size-row"><span class="size-label">Color:</span>
+        <select class="size-select" id="h2-color"><option>Navy Blue</option><option>Light Blue</option><option>Red</option><option>Yellow</option><option>Pink</option><option>Black</option><option>White</option><option>Gray</option></select>
+      </div>
+      <div class="size-row"><span class="size-label">Size:</span>
+        <select class="size-select" id="h2-size"><option>S</option><option>M</option><option selected>L</option><option>XL</option><option>2X</option><option>3X</option><option>4X</option><option>5X</option></select>
+      </div>
+      <div class="price-row"><span class="price">$59.99</span></div>
+      <button class="btn-atc" onclick="addToCart(this,'One Mile at a Time Hoodie','$59.99',59.99,'h2-color','h2-size')">+ Add to Cart</button>
+    </div>
+  </div>
+
+  <div class="card" data-cat="hoodie">
+    <div class="card-img">
+      <img src="https://cdn.shopify.com/s/files/1/0001/9129/9624/files/Virtual_Model-11ae92cd-4594-48e4-a900-ab86d3ae7b2c-Photoroom.png?v=1780867143" alt="Heartbeat of America Hoodie" style="width:100%;height:100%;object-fit:cover;display:block;"/>
+      <span class="badge">Hoodie</span>
+    </div>
+    <div class="card-body">
+      <div class="card-name">Heartbeat of America Hoodie</div>
+      <div class="card-desc">Company branded "Heartbeat of America" graphic pullover hoodie. Heavyweight fleece.</div>
+      <div class="size-row"><span class="size-label">Color:</span>
+        <select class="size-select" id="h3-color"><option>Navy Blue</option><option>Light Blue</option><option>Red</option><option>Yellow</option><option>Pink</option><option>Black</option><option>White</option><option>Gray</option></select>
+      </div>
+      <div class="size-row"><span class="size-label">Size:</span>
+        <select class="size-select" id="h3-size"><option>S</option><option>M</option><option selected>L</option><option>XL</option><option>2X</option><option>3X</option><option>4X</option><option>5X</option></select>
+      </div>
+      <div class="price-row"><span class="price">$59.99</span></div>
+      <button class="btn-atc" onclick="addToCart(this,'Heartbeat of America Hoodie','$59.99',59.99,'h3-color','h3-size')">+ Add to Cart</button>
+    </div>
+  </div>
+
+  <div class="card" data-cat="hoodie">
+    <div class="card-img">
+      <img src="https://cdn.shopify.com/s/files/1/0001/9129/9624/files/grok-image-4b2ed436-a5ab-4517-9035-5993723ad8fc.jpg?v=1780867374" alt="Market Isn't Dead Hoodie" style="width:100%;height:100%;object-fit:cover;display:block;"/>
+      <span class="badge">Hoodie</span>
+    </div>
+    <div class="card-body">
+      <div class="card-name">Market Isn't Dead Hoodie</div>
+      <div class="card-desc">Company branded "Market Isn't Dead" statement hoodie. Heavyweight fleece pullover.</div>
+      <div class="size-row"><span class="size-label">Color:</span>
+        <select class="size-select" id="h4-color"><option>Navy Blue</option><option>Light Blue</option><option>Red</option><option>Yellow</option><option>Pink</option><option>Black</option><option>White</option><option>Gray</option></select>
+      </div>
+      <div class="size-row"><span class="size-label">Size:</span>
+        <select class="size-select" id="h4-size"><option>S</option><option>M</option><option selected>L</option><option>XL</option><option>2X</option><option>3X</option><option>4X</option><option>5X</option></select>
+      </div>
+      <div class="price-row"><span class="price">$59.99</span></div>
+      <button class="btn-atc" onclick="addToCart(this,'Market Isn\'t Dead Hoodie','$59.99',59.99,'h4-color','h4-size')">+ Add to Cart</button>
+    </div>
+  </div>
+
+</div>
+
+<!-- ══════════ JUMPSUITS ══════════ -->
+<div class="section-label" data-category="jumpsuit">Apparel Sets <span>$99.99 each · Sizes S–5X</span></div>
+<div class="product-grid" data-category="jumpsuit">
+
+  <div class="card" data-cat="jumpsuit">
+    <div class="card-img">
+      <img src="https://cdn.shopify.com/s/files/1/0001/9129/9624/files/ChatGPT_Image_Jun_7_2026_at_04_20_01_PM.png?v=1780874439" alt="Men's Quick Drying Short Set" style="width:100%;height:100%;object-fit:cover;display:block;"/>
+      <span class="badge">Short Set</span>
+    </div>
+    <div class="card-body">
+      <div class="card-name">Men's Quick Drying Short Set</div>
+      <div class="card-desc">Company branded lightweight quick-dry short set. Perfect for on and off the road.</div>
+      <div class="size-row"><span class="size-label">Color:</span>
+        <select class="size-select" id="j1-color"><option>Fern Green/Black</option><option>White/Black</option><option>Red/Black</option><option>Black/Black</option><option>Navy Blue/Black</option><option>Pepsi Blue/Black</option><option>Dark Gray/Black</option><option>Light Gray/Black</option><option>Khaki/Black</option></select>
+      </div>
+      <div class="size-row"><span class="size-label">Size:</span>
+        <select class="size-select" id="j1-size"><option>S</option><option>M</option><option selected>L</option><option>XL</option><option>2X</option><option>3X</option><option>4X</option><option>5X</option></select>
+      </div>
+      <div class="price-row"><span class="price">$99.99</span></div>
+      <button class="btn-atc" onclick="addToCart(this,'Men\'s Quick Drying Short Set','$99.99',99.99,'j1-color','j1-size')">+ Add to Cart</button>
+    </div>
+  </div>
+
+  <div class="card" data-cat="jumpsuit">
+    <div class="card-img">
+      <img src="https://cdn.shopify.com/s/files/1/0001/9129/9624/files/ChatGPT_Image_Jun_7_2026_at_04_37_58_PM.png?v=1780875510" alt="Men's Loose Sweatsuit" style="width:100%;height:100%;object-fit:cover;display:block;"/>
+      <span class="badge">Sweatsuit</span>
+    </div>
+    <div class="card-body">
+      <div class="card-name">Men's Loose Sweatsuit</div>
+      <div class="card-desc">Company branded relaxed fit sweatsuit. Comfortable on and off the road.</div>
+      <div class="size-row"><span class="size-label">Color:</span>
+        <select class="size-select" id="j2-color"><option>Olive/Black</option><option>Blue/Black</option><option>Red/Black</option><option>Black/Black</option><option>Navy/Black</option></select>
+      </div>
+      <div class="size-row"><span class="size-label">Size:</span>
+        <select class="size-select" id="j2-size"><option>S</option><option>M</option><option selected>L</option><option>XL</option><option>2X</option><option>3X</option><option>4X</option><option>5X</option></select>
+      </div>
+      <div class="price-row"><span class="price">$99.99</span></div>
+      <button class="btn-atc" onclick="addToCart(this,'Men\'s Loose Sweatsuit','$99.99',99.99,'j2-color','j2-size')">+ Add to Cart</button>
+    </div>
+  </div>
+
+  <div class="card" data-cat="jumpsuit">
+    <div class="card-img">
+      <img src="https://cdn.shopify.com/s/files/1/0001/9129/9624/files/ChatGPT_Image_Jun_7_2026_at_04_45_54_PM.png?v=1780875972" alt="Women's Casual Jogging Suit" style="width:100%;height:100%;object-fit:cover;display:block;"/>
+      <span class="badge">Jogging Suit</span>
+    </div>
+    <div class="card-body">
+      <div class="card-name">Women's Casual Jogging Suit</div>
+      <div class="card-desc">Company branded relaxed fit jogging suit. Stylish and comfortable.</div>
+      <div class="size-row"><span class="size-label">Color:</span>
+        <select class="size-select" id="j3-color"><option>Black</option><option>Red</option><option>Coffee Brown</option><option>Pink</option><option>Purple</option><option>Gray</option></select>
+      </div>
+      <div class="size-row"><span class="size-label">Size:</span>
+        <select class="size-select" id="j3-size"><option>S</option><option>M</option><option selected>L</option><option>XL</option><option>XXL</option></select>
+      </div>
+      <div class="price-row"><span class="price">$99.99</span></div>
+      <button class="btn-atc" onclick="addToCart(this,'Women\'s Casual Jogging Suit','$99.99',99.99,'j3-color','j3-size')">+ Add to Cart</button>
+    </div>
+  </div>
+
+  <div class="card" data-cat="jumpsuit">
+    <div class="card-img">
+      <img src="https://cdn.shopify.com/s/files/1/0001/9129/9624/files/ChatGPT_Image_Jun_7_2026_at_04_57_41_PM.png?v=1780876685" alt="Women's Casual Short Set" style="width:100%;height:100%;object-fit:cover;display:block;"/>
+      <span class="badge">Short Set</span>
+    </div>
+    <div class="card-body">
+      <div class="card-name">Women's Casual Short Set</div>
+      <div class="card-desc">Company branded casual short set. Light and comfortable.</div>
+      <div class="size-row"><span class="size-label">Color:</span>
+        <select class="size-select" id="j4-color"><option>White/Black</option><option>Red/Black</option></select>
+      </div>
+      <div class="size-row"><span class="size-label">Size:</span>
+        <select class="size-select" id="j4-size"><option>S</option><option>M</option><option selected>L</option><option>XL</option><option>XXL</option></select>
+      </div>
+      <div class="price-row"><span class="price">$99.99</span></div>
+      <button class="btn-atc" onclick="addToCart(this,'Women\'s Casual Short Set','$99.99',99.99,'j4-color','j4-size')">+ Add to Cart</button>
+    </div>
+  </div>
+
+</div>
+
+<!-- ══════════ BACKPACKS ══════════ -->
+<div class="section-label" data-category="backpack">Bags &amp; Coolers <span>$79.99 each</span></div>
+<div class="product-grid" data-category="backpack">
+
+  <div class="card" data-cat="backpack">
+    <div class="card-img">
+      <img src="https://cdn.shopify.com/s/files/1/0001/9129/9624/files/ChatGPT_Image_Jun_7_2026_at_03_56_10_PM.png?v=1780873033" alt="F&C Hauler Backpack" style="width:100%;height:100%;object-fit:cover;display:block;"/>
+      <span class="badge">Backpack</span>
+    </div>
+    <div class="card-body">
+      <div class="card-name">F&amp;C Hauler Backpack</div>
+      <div class="card-desc">Company branded 30L heavy-duty pack. Padded laptop sleeve.</div>
+      <div class="size-row"><span class="size-label">Color:</span>
+        <select class="size-select" id="b1-color"><option>Navy Blue</option><option>Black</option><option>Gray</option></select>
+      </div>
+      <div class="price-row"><span class="price">$79.99</span></div>
+      <button class="btn-atc" onclick="addToCart(this,'F&amp;C Hauler Backpack','$79.99',79.99,'b1-color','')">+ Add to Cart</button>
+    </div>
+  </div>
+
+  <div class="card" data-cat="backpack">
+    <div class="card-img">
+      <img src="https://cdn.shopify.com/s/files/1/0001/9129/9624/files/ChatGPT_Image_Jun_7_2026_at_04_01_32_PM.png?v=1780873371" alt="F&C Daypack – Slim" style="width:100%;height:100%;object-fit:cover;display:block;"/>
+      <span class="badge">Backpack</span>
+    </div>
+    <div class="card-body">
+      <div class="card-name">F&amp;C Daypack – Slim</div>
+      <div class="card-desc">Company branded lightweight 20L slim pack. Perfect for daily use.</div>
+      <div class="size-row"><span class="size-label">Color:</span>
+        <select class="size-select" id="b2-color"><option>Navy Blue</option><option>Black</option><option>Gray</option></select>
+      </div>
+      <div class="price-row"><span class="price">$79.99</span></div>
+      <button class="btn-atc" onclick="addToCart(this,'F&amp;C Daypack – Slim','$79.99',79.99,'b2-color','')">+ Add to Cart</button>
+    </div>
+  </div>
+
+  <div class="card" data-cat="backpack">
+    <div class="card-img">
+      <img src="https://cdn.shopify.com/s/files/1/0001/9129/9624/files/ChatGPT_Image_Jun_7_2026_at_04_10_30_PM_9b8a8697-0b20-499e-8504-f98c03f25549.png?v=1780874001" alt="F&C Cooler" style="width:100%;height:100%;object-fit:cover;display:block;"/>
+      <span class="badge">Backpack</span>
+    </div>
+    <div class="card-body">
+      <div class="card-name">F&amp;C Cooler</div>
+      <div class="card-desc">Company branded insulated cooler bag. Perfect for the road.</div>
+      <div class="size-row"><span class="size-label">Color:</span>
+        <select class="size-select" id="b3-color"><option>Navy Blue</option><option>Black</option><option>Gray</option></select>
+      </div>
+      <div class="price-row"><span class="price">$79.99</span></div>
+      <button class="btn-atc" onclick="addToCart(this,'F&amp;C Cooler','$79.99',79.99,'b3-color','')">+ Add to Cart</button>
+    </div>
+  </div>
+
+</div>
+
+<!-- ══════════ MUGS & TUMBLERS ══════════ -->
+<div class="section-label" data-category="drinkware">Mugs &amp; Tumblers <span>Mug $24.99–$39.99 · Tumbler $44.99</span></div>
+<div class="product-grid" data-category="drinkware">
+
+  <div class="card" data-cat="drinkware">
+    <div class="card-img">
+      <img src="https://cdn.shopify.com/s/files/1/0001/9129/9624/files/9222400d-34d1-4202-af74-da6812d3b01a.png?v=1780878459" alt="Two-Tone F&C Coffee Mug" style="width:100%;height:100%;object-fit:cover;display:block;"/>
+      <span class="badge">Mug</span>
+    </div>
+    <div class="card-body">
+      <div class="card-name">Two-Tone F&amp;C Coffee Mug</div>
+      <div class="card-desc">Company branded 11oz two-tone ceramic mug. Dishwasher safe.</div>
+      <div class="size-row"><span class="size-label">Color:</span>
+        <select class="size-select" id="d1-color"><option>Pink/White</option><option>Black/White</option><option>Navy/White</option><option>Green/White</option><option>Sky Blue/White</option><option>Red/White</option></select>
+      </div>
+      <div class="price-row"><span class="price">$24.99</span></div>
+      <button class="btn-atc" onclick="addToCart(this,'Two-Tone F&amp;C Coffee Mug','$24.99',24.99,'d1-color','')">+ Add to Cart</button>
+    </div>
+  </div>
+
+  <div class="card" data-cat="drinkware">
+    <div class="card-img">
+      <img src="https://cdn.shopify.com/s/files/1/0001/9129/9624/files/ChatGPT_Image_Jun_7_2026_at_08_31_21_PM.png?v=1780889721" alt="F&C Classic Coffee Mug" style="width:100%;height:100%;object-fit:cover;display:block;"/>
+      <span class="badge">Mug</span>
+    </div>
+    <div class="card-body">
+      <div class="card-name">F&amp;C Classic Coffee Mug</div>
+      <div class="card-desc">Company branded 11oz classic ceramic mug. Dishwasher safe.</div>
+      <div class="size-row"><span class="size-label">Color:</span>
+        <select class="size-select" id="d5-color"><option>Black</option><option>White</option></select>
+      </div>
+      <div class="price-row"><span class="price">$24.99</span></div>
+      <button class="btn-atc" onclick="addToCart(this,'F&amp;C Classic Coffee Mug','$24.99',24.99,'d5-color','')">+ Add to Cart</button>
+    </div>
+  </div>
+
+  <div class="card" data-cat="drinkware">
+    <div class="card-img">
+      <img src="https://cdn.shopify.com/s/files/1/0001/9129/9624/files/ChatGPT_Image_Jun_7_2026_at_05_05_27_PM.png?v=1780877890" alt="F&C Stanley Tumbler with Top Handle" style="width:100%;height:100%;object-fit:cover;display:block;"/>
+      <span class="badge">Tumbler</span>
+    </div>
+    <div class="card-body">
+      <div class="card-name">F&amp;C Stanley Tumbler w/ Top Handle</div>
+      <div class="card-desc">Company branded 40oz insulated Stanley-style tumbler with top handle. 12hrs hot · 24hrs cold.</div>
+      <div class="size-row"><span class="size-label">Color:</span>
+        <select class="size-select" id="d2-color"><option>Black</option><option>White</option><option>Blue</option></select>
+      </div>
+      <div class="price-row"><span class="price">$44.99</span></div>
+      <button class="btn-atc" onclick="addToCart(this,'F&amp;C Stanley Tumbler w/ Top Handle','$44.99',44.99,'d2-color','')">+ Add to Cart</button>
+    </div>
+  </div>
+
+  <div class="card" data-cat="drinkware">
+    <div class="card-img">
+      <img src="https://cdn.shopify.com/s/files/1/0001/9129/9624/files/ChatGPT_Image_Jun_7_2026_at_05_20_50_PM.png?v=1780878095" alt="F&C 40oz Tumbler with Side Handle and Straw" style="width:100%;height:100%;object-fit:cover;display:block;"/>
+      <span class="badge">Tumbler</span>
+    </div>
+    <div class="card-body">
+      <div class="card-name">F&amp;C 40oz Tumbler w/ Side Handle &amp; Straw</div>
+      <div class="card-desc">Company branded 40oz insulated tumbler with side handle and straw. 12hrs hot · 24hrs cold.</div>
+      <div class="size-row"><span class="size-label">Color:</span>
+        <select class="size-select" id="d3-color"><option>Black</option><option>White</option><option>Blue</option></select>
+      </div>
+      <div class="price-row"><span class="price">$44.99</span></div>
+      <button class="btn-atc" onclick="addToCart(this,'F&amp;C 40oz Tumbler w/ Side Handle &amp; Straw','$44.99',44.99,'d3-color','')">+ Add to Cart</button>
+    </div>
+  </div>
+
+  <div class="card" data-cat="drinkware">
+    <div class="card-img">
+      <img src="https://cdn.shopify.com/s/files/1/0001/9129/9624/files/8f2d5a53-01e9-4fc9-9fcf-8cc7676f270e.png?v=1780878286" alt="F&C 40oz Tumbler" style="width:100%;height:100%;object-fit:cover;display:block;"/>
+      <span class="badge">Tumbler</span>
+    </div>
+    <div class="card-body">
+      <div class="card-name">F&amp;C 40oz Tumbler</div>
+      <div class="card-desc">Company branded 40oz insulated tumbler. Clean minimal design. 12hrs hot · 24hrs cold.</div>
+      <div class="size-row"><span class="size-label">Color:</span>
+        <select class="size-select" id="d4-color"><option>Black</option><option>White</option><option>Blue</option></select>
+      </div>
+      <div class="price-row"><span class="price">$44.99</span></div>
+      <button class="btn-atc" onclick="addToCart(this,'F&amp;C 40oz Tumbler','$44.99',44.99,'d4-color','')">+ Add to Cart</button>
+    </div>
+  </div>
+
+  <div class="card" data-cat="drinkware">
+    <div class="card-img">
+      <img src="https://cdn.shopify.com/s/files/1/0001/9129/9624/files/ChatGPT_Image_Jun_7_2026_at_09_10_35_PM.png?v=1780891917" alt="F&C Oversized Coffee Mug 17oz" style="width:100%;height:100%;object-fit:cover;display:block;"/>
+      <span class="badge">Mug</span>
+    </div>
+    <div class="card-body">
+      <div class="card-name">F&amp;C Oversized Coffee Mug 17oz</div>
+      <div class="card-desc">Company branded oversized 17oz ceramic mug. Dishwasher safe.</div>
+      <div class="size-row"><span class="size-label">Color:</span>
+        <select class="size-select" id="d6-color"><option>Black</option><option>White</option></select>
+      </div>
+      <div class="price-row"><span class="price">$39.99</span></div>
+      <button class="btn-atc" onclick="addToCart(this,'F&amp;C Oversized Coffee Mug 17oz','$39.99',39.99,'d6-color','')">+ Add to Cart</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  const COLOR_MAP = {
+    'Navy Blue':       '#1a3a5c',
+    'Navy':            '#1a3a5c',
+    'Navy Blue/Black': '#1a3a5c',
+    'Navy/Black':      '#1a3a5c',
+    'Light Blue':      '#8cc3fa',
+    'Pepsi Blue/Black':'#0057a8',
+    'Blue':            '#2255aa',
+    'Red':             '#cc2222',
+    'Red/Black':       '#cc2222',
+    'Yellow':          '#f5c842',
+    'Pink':            '#f48fb1',
+    'Black':           '#1a1a1a',
+    'Black/Black':     '#1a1a1a',
+    'White':           '#f0f0f0',
+    'White/Black':     '#f0f0f0',
+    'Gray':            '#888888',
+    'Dark Gray/Black': '#444444',
+    'Light Gray/Black':'#bbbbbb',
+    'Fern Green/Black':'#4a7c59',
+    'Olive/Black':     '#6b7c3a',
+    'Khaki/Black':     '#c3a96b',
+    'Coffee Brown':    '#6f4e37',
+    'Purple':          '#7b3fa0',
+    'Pink/White':      '#f48fb1',
+    'Black/White':     '#1a1a1a',
+    'Navy/White':      '#1a3a5c',
+    'Green/White':     '#2e7d32',
+    'Sky Blue/White':  '#87ceeb',
+    'Red/White':       '#cc2222',
+  };
+
+  function convertColorSelects() {
+    document.querySelectorAll('select[id$="-color"]').forEach(sel => {
+      const options = Array.from(sel.options).map(o => o.value);
+      const wrapper = document.createElement('div');
+      const bubblesDiv = document.createElement('div');
+      bubblesDiv.className = 'color-bubbles';
+      const label = document.createElement('div');
+      label.className = 'color-selected-label';
+      label.id = sel.id + '-label';
+      label.textContent = options[0];
+
+      options.forEach((color, i) => {
+        const bubble = document.createElement('button');
+        bubble.className = 'color-bubble' + (i === 0 ? ' selected' : '');
+        bubble.title = color;
+        bubble.style.background = COLOR_MAP[color] || '#cccccc';
+        if (color === 'White' || color === 'White/Black') {
+          bubble.style.boxShadow = '0 0 0 1px #cccccc';
+        }
+        bubble.addEventListener('click', () => {
+          bubblesDiv.querySelectorAll('.color-bubble').forEach(b => b.classList.remove('selected'));
+          bubble.classList.add('selected');
+          sel.value = color;
+          label.textContent = color;
+        });
+        bubblesDiv.appendChild(bubble);
+      });
+
+      const row = sel.closest('.size-row');
+      wrapper.appendChild(bubblesDiv);
+      wrapper.appendChild(label);
+      row.replaceChild(wrapper, sel);
+      sel.style.display = 'none';
+      row.appendChild(sel);
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', convertColorSelects);
+
+  const DISCOUNT_CODES = {
+    'FCTEAM50': { pct: 50, label: 'Employee 50% Off' }
+  };
+  let appliedDiscount = null;
+  let cart = [];
+
+  function addToCart(btn, name, priceStr, priceNum, colorId, sizeId) {
+    const color = colorId ? document.getElementById(colorId)?.value : '';
+    const size  = sizeId  ? document.getElementById(sizeId)?.value  : '';
+    const key   = name + '|' + color + '|' + size;
+    const existing = cart.find(i => i.key === key);
+    if (existing) {
+      existing.qty++;
+    } else {
+      cart.push({ key, name, priceStr, priceNum, color, size, qty: 1 });
+    }
+    btn.classList.add('flash');
+    btn.textContent = '✓ Added!';
+    setTimeout(() => { btn.classList.remove('flash'); btn.textContent = '+ Add to Cart'; }, 900);
+    renderCart();
+    openCart();
+  }
+
+  function applyCoupon() {
+    const input = document.getElementById('coupon-input');
+    const msg   = document.getElementById('coupon-msg');
+    const code  = input.value.trim().toUpperCase();
+    if (DISCOUNT_CODES[code]) {
+      appliedDiscount = { code, ...DISCOUNT_CODES[code] };
+      input.classList.remove('invalid');
+      input.classList.add('valid');
+      msg.className = 'coupon-msg ok';
+      msg.textContent = '✓ ' + DISCOUNT_CODES[code].label + ' applied!';
+    } else {
+      appliedDiscount = null;
+      input.classList.remove('valid');
+      input.classList.add('invalid');
+      msg.className = 'coupon-msg err';
+      msg.textContent = '✗ Invalid code. Please try again.';
+    }
+    renderCart();
+  }
+
+  function renderCart() {
+    const container    = document.getElementById('cart-items');
+    const empty        = document.getElementById('cart-empty');
+    const countEl      = document.getElementById('cart-count');
+    const totalEl      = document.getElementById('cart-total');
+    const discountRow  = document.getElementById('discount-row');
+    const discountLbl  = document.getElementById('discount-label');
+    const discountAmt  = document.getElementById('discount-amount');
+    const totalCount   = cart.reduce((s,i) => s + i.qty, 0);
+    const subtotal     = cart.reduce((s,i) => s + i.priceNum * i.qty, 0);
+    let discountValue  = 0;
+    if (appliedDiscount && subtotal > 0) {
+      discountValue = subtotal * (appliedDiscount.pct / 100);
+      discountRow.style.display = 'flex';
+      discountLbl.textContent = appliedDiscount.label;
+      discountAmt.textContent = '-$' + discountValue.toFixed(2);
+    } else {
+      discountRow.style.display = 'none';
+    }
+    const totalAmt = Math.max(0, subtotal - discountValue);
+    countEl.textContent = totalCount;
+    totalEl.textContent = '$' + totalAmt.toFixed(2);
+    Array.from(container.children).forEach(c => { if (c.id !== 'cart-empty') c.remove(); });
+    if (cart.length === 0) {
+      empty.style.display = 'block';
+    } else {
+      empty.style.display = 'none';
+      cart.forEach((item, idx) => {
+        const meta = [item.color, item.size].filter(Boolean).join(' · ');
+        const div = document.createElement('div');
+        div.className = 'cart-item';
+        div.innerHTML = `
+          <div class="cart-item-info">
+            <div class="cart-item-name">${item.name}</div>
+            ${meta ? `<div class="cart-item-meta">${meta}</div>` : ''}
+            <div class="cart-item-qty">
+              <button class="qty-btn" onclick="changeQty(${idx},-1)">−</button>
+              <span class="qty-num">${item.qty}</span>
+              <button class="qty-btn" onclick="changeQty(${idx},1)">+</button>
+            </div>
+            <div class="cart-item-price">${item.priceStr} × ${item.qty} = $${(item.priceNum * item.qty).toFixed(2)}</div>
+          </div>
+          <button class="cart-item-remove" onclick="removeItem(${idx})" title="Remove">✕</button>`;
+        container.appendChild(div);
+      });
+    }
+  }
+
+  function changeQty(idx, delta) {
+    cart[idx].qty += delta;
+    if (cart[idx].qty <= 0) cart.splice(idx, 1);
+    renderCart();
+  }
+
+  function removeItem(idx) {
+    cart.splice(idx, 1);
+    renderCart();
+  }
+
+  function clearCart() {
+    cart = [];
+    appliedDiscount = null;
+    const input = document.getElementById('coupon-input');
+    input.value = '';
+    input.className = 'coupon-input';
+    document.getElementById('coupon-msg').textContent = '';
+    renderCart();
+  }
+
+  function openCart() {
+    document.getElementById('cart-overlay').classList.add('open');
+    document.getElementById('cart-drawer').classList.add('open');
+  }
+
+  function closeCart() {
+    document.getElementById('cart-overlay').classList.remove('open');
+    document.getElementById('cart-drawer').classList.remove('open');
+  }
+
+  function filterProducts(cat, btn) {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('.section-label, .product-grid').forEach(el => {
+      el.style.display = (cat === 'all' || el.dataset.category === cat) ? '' : 'none';
+    });
+  }
+</script>
+</div><!-- /fc-store-wrap -->
+</body>
+</html>
