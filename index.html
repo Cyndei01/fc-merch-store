@@ -181,18 +181,6 @@
   @keyframes flashGreen { 0%,100%{background:var(--navy)} 50%{background:#2a8a4a} }
   .btn-atc.flash { animation:flashGreen 0.5s ease; }
 
-  /* ── BUY NOW (Stripe) BUTTON ── */
-  .btn-buy-now {
-    margin-top:0.4rem; width:100%; padding:0.65rem 1rem;
-    background:var(--blue-dark); color:var(--white);
-    border:2px solid var(--blue-dark); border-radius:7px;
-    font-family:'Barlow',sans-serif; font-size:0.92rem; font-weight:700;
-    cursor:pointer; display:flex; align-items:center; justify-content:center;
-    gap:0.4rem; transition:all 0.2s; letter-spacing:0.03em;
-    text-decoration:none;
-  }
-  .btn-buy-now:hover { background:var(--blue-deep); border-color:var(--blue-deep); }
-
   /* ── RESPONSIVE ── */
   @media (max-width:600px) {
     .product-grid { padding:0 1rem 1rem; grid-template-columns:1fr 1fr; }
@@ -267,7 +255,6 @@
       <div class="card-desc">Company branded structured 6-panel cap. One size fits most.</div>
       <div class="price-row"><span class="price">$29.99</span></div>
       <button class="btn-atc" onclick="addToCart(this,'F&amp;C Classic Snapback','$29.99',29.99,'','')">+ Add to Cart</button>
-      <a class="btn-buy-now" href="https://buy.stripe.com/dRm3cx1EN0TVgAR24MaAw00" target="_blank">⚡ Buy Now</a>
     </div>
   </div>
 
@@ -281,7 +268,6 @@
       <div class="card-desc">Company branded mesh back cap with foam front panel. Adjustable snapback closure.</div>
       <div class="price-row"><span class="price">$29.99</span></div>
       <button class="btn-atc" onclick="addToCart(this,'F&amp;C Classic Mesh Cap','$29.99',29.99,'','')">+ Add to Cart</button>
-      <a class="btn-buy-now" href="https://buy.stripe.com/6oU14pdnvfOP2K19xeaAw01" target="_blank">⚡ Buy Now</a>
     </div>
   </div>
 
@@ -295,7 +281,6 @@
       <div class="card-desc">Company branded knit beanie. One size fits most.</div>
       <div class="price-row"><span class="price">$29.99</span></div>
       <button class="btn-atc" onclick="addToCart(this,'F&amp;C Knit Beanie','$29.99',29.99,'','')">+ Add to Cart</button>
-      <a class="btn-buy-now" href="https://buy.stripe.com/7sY8wR5V3auv0BTcJqaAw02" target="_blank">⚡ Buy Now</a>
     </div>
   </div>
 
@@ -321,7 +306,6 @@
       </div>
       <div class="price-row"><span class="price">$39.99</span></div>
       <button class="btn-atc" onclick="addToCart(this,'F&amp;C Basic Logo Tee','$39.99',39.99,'s1-color','s1-size')">+ Add to Cart</button>
-      <a class="btn-buy-now" href="https://buy.stripe.com/aFacN72IReKL5WddNuaAw03" target="_blank">⚡ Buy Now</a>
     </div>
   </div>
 
@@ -341,7 +325,6 @@
       </div>
       <div class="price-row"><span class="price">$39.99</span></div>
       <button class="btn-atc" onclick="addToCart(this,'Heartbeat of America Tee','$39.99',39.99,'s2-color','s2-size')">+ Add to Cart</button>
-      <a class="btn-buy-now" href="https://buy.stripe.com/00w7sNdnv9qrbgxgZGaAw04" target="_blank">⚡ Buy Now</a>
     </div>
   </div>
 
@@ -361,7 +344,6 @@
       </div>
       <div class="price-row"><span class="price">$39.99</span></div>
       <button class="btn-atc" onclick="addToCart(this,'One Mile at a Time Tee','$39.99',39.99,'s3-color','s3-size')">+ Add to Cart</button>
-      <a class="btn-buy-now" href="https://buy.stripe.com/fZueVfdnv0TV84l10IaAw05" target="_blank">⚡ Buy Now</a>
     </div>
   </div>
 
@@ -381,7 +363,6 @@
       </div>
       <div class="price-row"><span class="price">$39.99</span></div>
       <button class="btn-atc" onclick="addToCart(this,'Market Isn\'t Dead Tee','$39.99',39.99,'s4-color','s4-size')">+ Add to Cart</button>
-      <a class="btn-buy-now" href="https://buy.stripe.com/4gM14pdnv1XZ3O57p6aAw06" target="_blank">⚡ Buy Now</a>
     </div>
   </div>
 
@@ -407,7 +388,6 @@
       </div>
       <div class="price-row"><span class="price">$59.99</span></div>
       <button class="btn-atc" onclick="addToCart(this,'F&amp;C Basic Logo Hoodie','$59.99',59.99,'h1-color','h1-size')">+ Add to Cart</button>
-      <a class="btn-buy-now" href="https://buy.stripe.com/eVqbJ3cjr1XZ5Wd10IaAw07" target="_blank">⚡ Buy Now</a>
     </div>
   </div>
 
@@ -431,7 +411,6 @@
       </div>
       <div class="price-row"><span class="price">$59.99</span></div>
       <button class="btn-atc" onclick="addToCart(this,'One Mile at a Time Hoodie','$59.99',59.99,'h2-color','h2-size')">+ Add to Cart</button>
-      <a class="btn-buy-now" href="https://buy.stripe.com/28E28t0AJgST2K138QaAw08" target="_blank">⚡ Buy Now</a>
     </div>
   </div>
 
@@ -451,7 +430,6 @@
       </div>
       <div class="price-row"><span class="price">$59.99</span></div>
       <button class="btn-atc" onclick="addToCart(this,'Heartbeat of America Hoodie','$59.99',59.99,'h3-color','h3-size')">+ Add to Cart</button>
-      <a class="btn-buy-now" href="https://buy.stripe.com/8x2cN73MVdGH4S9eRyaAw09" target="_blank">⚡ Buy Now</a>
     </div>
   </div>
 
@@ -471,7 +449,6 @@
       </div>
       <div class="price-row"><span class="price">$59.99</span></div>
       <button class="btn-atc" onclick="addToCart(this,'Market Isn\'t Dead Hoodie','$59.99',59.99,'h4-color','h4-size')">+ Add to Cart</button>
-      <a class="btn-buy-now" href="https://buy.stripe.com/bJedRb6Z76ef5Wd8taaAw0a" target="_blank">⚡ Buy Now</a>
     </div>
   </div>
 
@@ -497,7 +474,6 @@
       </div>
       <div class="price-row"><span class="price">$99.99</span></div>
       <button class="btn-atc" onclick="addToCart(this,'Men\'s Quick Drying Short Set','$99.99',99.99,'j1-color','j1-size')">+ Add to Cart</button>
-      <a class="btn-buy-now" href="https://buy.stripe.com/eVqeVfcjr467ckB7p6aAw0b" target="_blank">⚡ Buy Now</a>
     </div>
   </div>
 
@@ -517,7 +493,6 @@
       </div>
       <div class="price-row"><span class="price">$99.99</span></div>
       <button class="btn-atc" onclick="addToCart(this,'Men\'s Loose Sweatsuit','$99.99',99.99,'j2-color','j2-size')">+ Add to Cart</button>
-      <a class="btn-buy-now" href="https://buy.stripe.com/5kQeVf4QZauv5Wd7p6aAw0c" target="_blank">⚡ Buy Now</a>
     </div>
   </div>
 
@@ -537,7 +512,6 @@
       </div>
       <div class="price-row"><span class="price">$99.99</span></div>
       <button class="btn-atc" onclick="addToCart(this,'Women\'s Casual Jogging Suit','$99.99',99.99,'j3-color','j3-size')">+ Add to Cart</button>
-      <a class="btn-buy-now" href="https://buy.stripe.com/cNifZj2IR7ijact24MaAw0d" target="_blank">⚡ Buy Now</a>
     </div>
   </div>
 
@@ -557,7 +531,6 @@
       </div>
       <div class="price-row"><span class="price">$99.99</span></div>
       <button class="btn-atc" onclick="addToCart(this,'Women\'s Casual Short Set','$99.99',99.99,'j4-color','j4-size')">+ Add to Cart</button>
-      <a class="btn-buy-now" href="https://buy.stripe.com/aFa9AV97fcCDgAR7p6aAw0e" target="_blank">⚡ Buy Now</a>
     </div>
   </div>
 
@@ -580,7 +553,6 @@
       </div>
       <div class="price-row"><span class="price">$79.99</span></div>
       <button class="btn-atc" onclick="addToCart(this,'F&amp;C Hauler Backpack','$79.99',79.99,'b1-color','')">+ Add to Cart</button>
-      <a class="btn-buy-now" href="https://buy.stripe.com/9B69AVgzH7ijgARcJqaAw0f" target="_blank">⚡ Buy Now</a>
     </div>
   </div>
 
@@ -597,7 +569,6 @@
       </div>
       <div class="price-row"><span class="price">$79.99</span></div>
       <button class="btn-atc" onclick="addToCart(this,'F&amp;C Daypack – Slim','$79.99',79.99,'b2-color','')">+ Add to Cart</button>
-      <a class="btn-buy-now" href="https://buy.stripe.com/6oUeVf6Z7auvckBdNuaAw0g" target="_blank">⚡ Buy Now</a>
     </div>
   </div>
 
@@ -614,7 +585,6 @@
       </div>
       <div class="price-row"><span class="price">$79.99</span></div>
       <button class="btn-atc" onclick="addToCart(this,'F&amp;C Cooler','$79.99',79.99,'b3-color','')">+ Add to Cart</button>
-      <a class="btn-buy-now" href="https://buy.stripe.com/5kQ6oJerzfOPdoFdNuaAw0h" target="_blank">⚡ Buy Now</a>
     </div>
   </div>
 
@@ -634,7 +604,6 @@
       <div class="card-desc">Company branded 11oz ceramic mug. Dishwasher safe.</div>
       <div class="price-row"><span class="price">$24.99</span></div>
       <button class="btn-atc" onclick="addToCart(this,'F&amp;C Coffee Mug','$24.99',24.99,'','')">+ Add to Cart</button>
-      <a class="btn-buy-now" href="https://buy.stripe.com/8x2fZjerz6ef98p9xeaAw0i" target="_blank">⚡ Buy Now</a>
     </div>
   </div>
 
@@ -651,7 +620,6 @@
       </div>
       <div class="price-row"><span class="price">$44.99</span></div>
       <button class="btn-atc" onclick="addToCart(this,'F&amp;C Stanley Tumbler w/ Top Handle','$44.99',44.99,'d2-color','')">+ Add to Cart</button>
-      <a class="btn-buy-now" href="https://buy.stripe.com/aFaeVf0AJfOPgAR9xeaAw0j" target="_blank">⚡ Buy Now</a>
     </div>
   </div>
 
@@ -668,7 +636,6 @@
       </div>
       <div class="price-row"><span class="price">$44.99</span></div>
       <button class="btn-atc" onclick="addToCart(this,'F&amp;C 40oz Tumbler w/ Side Handle &amp; Straw','$44.99',44.99,'d3-color','')">+ Add to Cart</button>
-      <a class="btn-buy-now" href="https://buy.stripe.com/14A28tbfn323act4cUaAw0k" target="_blank">⚡ Buy Now</a>
     </div>
   <div class="card" data-cat="drinkware">
     <div class="card-img">
@@ -683,11 +650,12 @@
       </div>
       <div class="price-row"><span class="price">$44.99</span></div>
       <button class="btn-atc" onclick="addToCart(this,'F&amp;C 40oz Tumbler','$44.99',44.99,'d4-color','')">+ Add to Cart</button>
-      <a class="btn-buy-now" href="https://buy.stripe.com/cNifZj6Z75ab3O5cJqaAw0l" target="_blank">⚡ Buy Now</a>
     </div>
   </div>
 
 </div>
+
+<script>
   /* ── COLOR MAP ── */
   const COLOR_MAP = {
     'Navy Blue':       '#1a3a5c',
