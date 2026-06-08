@@ -122,6 +122,8 @@
 
   /* ── PRODUCT GRID ── */
   .product-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:1.5rem; padding:0 2rem 1rem; }
+  .product-grid .card:last-child:nth-child(3n-1) { grid-column:1; }
+  .product-grid .card:last-child:nth-child(3n-2) { grid-column:1; }
   @media (max-width:900px) { .product-grid { grid-template-columns:repeat(2,1fr); } }
 
   /* ── CARD ── */
