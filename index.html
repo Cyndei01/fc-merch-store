@@ -595,19 +595,38 @@
 </div>
 
 <!-- ══════════ MUGS & TUMBLERS ══════════ -->
-<div class="section-label" data-category="drinkware">Mugs &amp; Tumblers <span>Mug $24.99 · Tumbler $44.99</span></div>
+<div class="section-label" data-category="drinkware">Mugs &amp; Tumblers <span>Mug $24.99–$39.99 · Tumbler $44.99</span></div>
 <div class="product-grid" data-category="drinkware">
 
   <div class="card" data-cat="drinkware">
     <div class="card-img">
-      <img src="https://cdn.shopify.com/s/files/1/0001/9129/9624/files/9222400d-34d1-4202-af74-da6812d3b01a.png?v=1780878459" alt="F&C Coffee Mug" style="width:100%;height:100%;object-fit:cover;display:block;"/>
+      <img src="https://cdn.shopify.com/s/files/1/0001/9129/9624/files/9222400d-34d1-4202-af74-da6812d3b01a.png?v=1780878459" alt="Two-Tone F&C Coffee Mug" style="width:100%;height:100%;object-fit:cover;display:block;"/>
       <span class="badge">Mug</span>
     </div>
     <div class="card-body">
-      <div class="card-name">F&amp;C Coffee Mug</div>
-      <div class="card-desc">Company branded 11oz ceramic mug. Dishwasher safe.</div>
+      <div class="card-name">Two-Tone F&amp;C Coffee Mug</div>
+      <div class="card-desc">Company branded 11oz two-tone ceramic mug. Dishwasher safe.</div>
+      <div class="size-row"><span class="size-label">Color:</span>
+        <select class="size-select" id="d1-color"><option>Pink/White</option><option>Black/White</option><option>Navy/White</option><option>Green/White</option><option>Sky Blue/White</option><option>Red/White</option></select>
+      </div>
       <div class="price-row"><span class="price">$24.99</span></div>
-      <button class="btn-atc" onclick="addToCart(this,'F&amp;C Coffee Mug','$24.99',24.99,'','')">+ Add to Cart</button>
+      <button class="btn-atc" onclick="addToCart(this,'Two-Tone F&amp;C Coffee Mug','$24.99',24.99,'d1-color','')">+ Add to Cart</button>
+    </div>
+  </div>
+
+  <div class="card" data-cat="drinkware">
+    <div class="card-img">
+      <img src="https://cdn.shopify.com/s/files/1/0001/9129/9624/files/ChatGPT_Image_Jun_7_2026_at_08_31_21_PM.png?v=1780889721" alt="F&C Classic Coffee Mug" style="width:100%;height:100%;object-fit:cover;display:block;"/>
+      <span class="badge">Mug</span>
+    </div>
+    <div class="card-body">
+      <div class="card-name">F&amp;C Classic Coffee Mug</div>
+      <div class="card-desc">Company branded 11oz classic ceramic mug. Dishwasher safe.</div>
+      <div class="size-row"><span class="size-label">Color:</span>
+        <select class="size-select" id="d5-color"><option>Black</option><option>White</option></select>
+      </div>
+      <div class="price-row"><span class="price">$24.99</span></div>
+      <button class="btn-atc" onclick="addToCart(this,'F&amp;C Classic Coffee Mug','$24.99',24.99,'d5-color','')">+ Add to Cart</button>
     </div>
   </div>
 
@@ -657,6 +676,22 @@
     </div>
   </div>
 
+  <div class="card" data-cat="drinkware">
+    <div class="card-img">
+      <img src="https://cdn.shopify.com/s/files/1/0001/9129/9624/files/ChatGPT_Image_Jun_7_2026_at_09_10_35_PM.png?v=1780891917" alt="F&C Oversized Coffee Mug 17oz" style="width:100%;height:100%;object-fit:cover;display:block;"/>
+      <span class="badge">Mug</span>
+    </div>
+    <div class="card-body">
+      <div class="card-name">F&amp;C Oversized Coffee Mug 17oz</div>
+      <div class="card-desc">Company branded oversized 17oz ceramic mug. Dishwasher safe.</div>
+      <div class="size-row"><span class="size-label">Color:</span>
+        <select class="size-select" id="d6-color"><option>Black</option><option>White</option></select>
+      </div>
+      <div class="price-row"><span class="price">$39.99</span></div>
+      <button class="btn-atc" onclick="addToCart(this,'F&amp;C Oversized Coffee Mug 17oz','$39.99',39.99,'d6-color','')">+ Add to Cart</button>
+    </div>
+  </div>
+
 </div>
 
 <script>
@@ -685,6 +720,12 @@
     'Khaki/Black':     '#c3a96b',
     'Coffee Brown':    '#6f4e37',
     'Purple':          '#7b3fa0',
+    'Pink/White':      '#f48fb1',
+    'Black/White':     '#1a1a1a',
+    'Navy/White':      '#1a3a5c',
+    'Green/White':     '#2e7d32',
+    'Sky Blue/White':  '#87ceeb',
+    'Red/White':       '#cc2222',
   };
 
   function convertColorSelects() {
