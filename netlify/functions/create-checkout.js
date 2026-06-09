@@ -1,34 +1,4 @@
-const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
-
-const EMPLOYEE_COUPON_ID = 'FCTEAM50_EMPLOYEE';
-
-async function getOrCreatePromoCode() {
-  // Ensure the coupon exists
-  let coupon;
-  try {
-    coupon = await stripe.coupons.retrieve(EMPLOYEE_COUPON_ID);
-  } catch {
-    coupon = await stripe.coupons.create({
-      id: EMPLOYEE_COUPON_ID,
-      name: 'Employee 50% Off',
-      percent_off: 50,
-      duration: 'forever',
-    });
-  }
-
-  // Find existing promotion code with code FCTEAM50
-  const promoCodes = await stripe.promotionCodes.list({ code: 'FCTEAM50', limit: 1 });
-  if (promoCodes.data.length > 0) {
-    return promoCodes.data[0].id;
-  }
-
-  // Create promotion code linked to the coupon
-  const promoCode = await stripe.promotionCodes.create({
-    coupon: coupon.id,
-    code: 'FCTEAM50',
-  });
-  return promoCode.id;
-}
+const SITE_URL = 'https://merch.fcpackaginginc.com';
 
 exports.handler = async (event) => {
   if (event.httpMethod === 'OPTIONS') {
@@ -38,35 +8,46 @@ exports.handler = async (event) => {
     return { statusCode: 405, body: 'Method Not Allowed' };
   }
 
-  try {
-    const { items, discountCode } = JSON.parse(event.body);
+  const key = (process.env.STRIPE_SECRET_KEY || '').trim();
+  if (!key) {
+    return respond(500, { error: 'Stripe key not configured.' });
+  }
 
-    if (!items || items.length === 0) {
+  let stripe;
+  try {
+    stripe = require('stripe')(key);
+  } catch (e) {
+    return respond(500, { error: 'Failed to load Stripe: ' + e.message });
+  }
+
+  try {
+    const body = JSON.parse(event.body || '{}');
+    const items = body.items || [];
+
+    if (items.length === 0) {
       return respond(400, { error: 'Cart is empty' });
     }
 
     const line_items = items.map(item => {
-      const nameParts = [item.name];
-      if (item.color) nameParts.push(item.color);
-      if (item.size)  nameParts.push(item.size);
+      const parts = [String(item.name)];
+      if (item.color) parts.push(String(item.color));
+      if (item.size)  parts.push(String(item.size));
       return {
         price_data: {
           currency: 'usd',
-          product_data: { name: nameParts.join(' · ') },
-          unit_amount: Math.round(item.priceNum * 100),
+          product_data: { name: parts.join(', ') },
+          unit_amount: Math.round(Number(item.priceNum) * 100),
         },
-        quantity: item.qty,
+        quantity: Math.max(1, parseInt(item.qty, 10)),
       };
     });
 
-    const siteUrl = (process.env.URL || 'https://merch.fcpackaginginc.com').replace(/\/$/, '');
-
-    const sessionParams = {
+    const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
       line_items,
       mode: 'payment',
-      success_url: `${siteUrl}/success.html?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url:  `${siteUrl}/`,
+      success_url: SITE_URL + '/success.html',
+      cancel_url:  SITE_URL + '/',
       shipping_address_collection: { allowed_countries: ['US'] },
       shipping_options: [{
         shipping_rate_data: {
@@ -79,21 +60,12 @@ exports.handler = async (event) => {
           },
         },
       }],
-    };
-
-    if (discountCode === 'FCTEAM50') {
-      const promoCodeId = await getOrCreatePromoCode();
-      sessionParams.discounts = [{ promotion_code: promoCodeId }];
-    } else {
-      // allow_promotion_codes: true lets customers enter FCTEAM50 directly on Stripe's page
-      sessionParams.allow_promotion_codes = true;
-    }
-
-    const session = await stripe.checkout.sessions.create(sessionParams);
+      allow_promotion_codes: true,
+    });
 
     return respond(200, { url: session.url });
   } catch (err) {
-    console.error('Stripe error:', JSON.stringify({ message: err.message, type: err.type, code: err.code }));
+    console.error('Stripe error:', err.message, err.type, err.code, err.param);
     return respond(500, { error: err.message });
   }
 };
