@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Order Confirmed – F&C Packaging Gear</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800&family=Barlow:wght@400;500;600&display=swap');
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Barlow', sans-serif;
+    background: #f4f8fc;
+    color: #1a2d42;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+  }
+  .card {
+    background: #fff;
+    border-radius: 14px;
+    box-shadow: 0 4px 32px rgba(13,31,51,0.12);
+    padding: 3rem 2.5rem;
+    max-width: 480px;
+    width: 100%;
+    text-align: center;
+    border-top: 5px solid #4a9de0;
+  }
+  .checkmark {
+    width: 72px; height: 72px;
+    background: #e8f8f0;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 1.5rem;
+    font-size: 2.2rem;
+  }
+  h1 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 2rem; font-weight: 800;
+    color: #0d1f33; text-transform: uppercase;
+    letter-spacing: 0.06em; margin-bottom: 0.75rem;
+  }
+  p { color: #5a7a96; line-height: 1.6; margin-bottom: 0.5rem; }
+  .back-btn {
+    display: inline-block;
+    margin-top: 2rem;
+    padding: 0.8rem 2rem;
+    background: #4a9de0;
+    color: #fff;
+    border-radius: 8px;
+    font-family: 'Barlow', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 700;
+    text-decoration: none;
+    transition: opacity 0.2s;
+  }
+  .back-btn:hover { opacity: 0.85; }
+</style>
+</head>
+<body>
+  <div class="card">
+    <div class="checkmark">✅</div>
+    <h1>Order Confirmed!</h1>
+    <p>Thank you for your purchase. Your F&amp;C gear is on its way!</p>
+    <p>A confirmation email has been sent to you by Stripe.</p>
+    <p style="margin-top:1rem;font-size:0.85rem;">Questions? Email us at <strong>fandcpackaginginc@gmail.com</strong></p>
+    <a class="back-btn" href="/">← Back to Store</a>
+  </div>
+</body>
+</html>
