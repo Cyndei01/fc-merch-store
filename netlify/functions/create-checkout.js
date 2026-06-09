@@ -2,17 +2,32 @@ const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
 const EMPLOYEE_COUPON_ID = 'FCTEAM50_EMPLOYEE';
 
-async function getOrCreateEmployeeCoupon() {
+async function getOrCreatePromoCode() {
+  // Ensure the coupon exists
+  let coupon;
   try {
-    return await stripe.coupons.retrieve(EMPLOYEE_COUPON_ID);
+    coupon = await stripe.coupons.retrieve(EMPLOYEE_COUPON_ID);
   } catch {
-    return await stripe.coupons.create({
+    coupon = await stripe.coupons.create({
       id: EMPLOYEE_COUPON_ID,
       name: 'Employee 50% Off',
       percent_off: 50,
       duration: 'forever',
     });
   }
+
+  // Find existing promotion code with code FCTEAM50
+  const promoCodes = await stripe.promotionCodes.list({ code: 'FCTEAM50', limit: 1 });
+  if (promoCodes.data.length > 0) {
+    return promoCodes.data[0].id;
+  }
+
+  // Create promotion code linked to the coupon
+  const promoCode = await stripe.promotionCodes.create({
+    coupon: coupon.id,
+    code: 'FCTEAM50',
+  });
+  return promoCode.id;
 }
 
 exports.handler = async (event) => {
@@ -67,9 +82,10 @@ exports.handler = async (event) => {
     };
 
     if (discountCode === 'FCTEAM50') {
-      const coupon = await getOrCreateEmployeeCoupon();
-      sessionParams.discounts = [{ coupon: coupon.id }];
+      const promoCodeId = await getOrCreatePromoCode();
+      sessionParams.discounts = [{ promotion_code: promoCodeId }];
     } else {
+      // allow_promotion_codes: true lets customers enter FCTEAM50 directly on Stripe's page
       sessionParams.allow_promotion_codes = true;
     }
 
